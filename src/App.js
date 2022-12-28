@@ -16,8 +16,9 @@ const SelectInput = ({
   const onChange = (e, value) => {
     input.onChange(value);
   };
-  console.log("touched", meta.touched);
-  console.log("error", meta.error);
+  // console.log("touched", meta.touched);
+  // console.log("error", meta.error);
+  console.log("meta", meta);
 
   const onFocus = (e) => {
     console.log("focus");
@@ -103,6 +104,7 @@ export default function App() {
             options={options}
             validate={required}
             setFieldTouched={form.mutators.setFieldTouched}
+            selectType={types.secondary}
             // onListboxOpenChange={onListboxOpenChange}
           ></Field>
           <br />
@@ -113,3 +115,8 @@ export default function App() {
     // <Select options={options} value={value} onChange={onChange} />
   );
 }
+
+export const types = {
+  primary: "primary",
+  secondary: "secondary",
+};
