@@ -43,7 +43,7 @@ const SelectInput = ({
       placeholder={placeholder}
       setFieldTouched={setFieldTouched}
       name={input.name}
-      error={meta.touched && meta.error ? meta.error : undefined}
+      error={!meta.pristine && meta.error ? meta.error : undefined}
       {...props}
       // label={label}
       // helperText={helperText}
