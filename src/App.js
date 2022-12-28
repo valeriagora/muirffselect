@@ -14,7 +14,7 @@ const SelectInput = ({
   ...props
 }) => {
   const onChange = (e, value) => {
-     input.onChange(value);
+    input.onChange(value);
   };
   console.log("touched", meta.touched);
   console.log("error", meta.error);

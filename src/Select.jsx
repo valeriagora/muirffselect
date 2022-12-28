@@ -184,16 +184,14 @@ export default function UnstyledSelectIntroduction({
     // setFieldTouched("select", false);
     setOpened(open);
   };
-  const {onBlur, onFocus,onChange,...restProps} = props;
   return (
     <SelectContainer>
       <CustomSelect
-        onChange={onChange}
+        onChange={props.onChange}
         value={props.value}
-        onBlur={props.onBlur}
-        onFocus={props.onFocus}
         // open={props.open}
         onListboxOpenChange={onListboxOpenChange}
+        {...props}
       >
         {props.options.map((option, idx) => (
           <StyledOption key={idx} value={option.value}>
