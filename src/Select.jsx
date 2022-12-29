@@ -19,7 +19,6 @@ const isPrimary = (type) => type === types.primary;
 
 const Button = React.forwardRef(function Button(props, ref) {
   const { ownerState, ...other } = props;
-  // console.log("buttonprops", props);
   return (
     <button type="button" {...other} ref={ref}>
       {other.children}
@@ -29,9 +28,9 @@ const Button = React.forwardRef(function Button(props, ref) {
 });
 
 const StyledButton = styled(Button, {
-  shouldForwardProp: () => true,
-})(
-  ({ theme, error, selectType }) => `
+  shouldForwardProp: (prop) => prop !== "selectType",
+})(({ theme, error, selectType }) => {
+  return `
   width: 100%;
   box-sizing: border-box;
   height: ${isPrimary(selectType) ? "48" : "40"}px;
@@ -65,7 +64,6 @@ const StyledButton = styled(Button, {
   }
   &:active {
     background: #3B3E4A;//x5
-
     border-color: #6C7080; //x3
     & > svg {
       color: #fff;
@@ -83,8 +81,8 @@ const StyledButton = styled(Button, {
     }
   }
   outline: none !important;
-  `
-);
+  `;
+});
 
 const StyledListbox = styled("ul")(
   ({ theme }) => `
@@ -92,7 +90,6 @@ const StyledListbox = styled("ul")(
   padding:0;
   overflow: auto;
   background: #3B3E4A;// x5
-  // background: slateblue; // x5
 
   max-height:240px;
   height:240px;
@@ -108,7 +105,7 @@ const StyledListbox = styled("ul")(
     transform: translateX(20px);
     margin:10px;
     margin-right:10px;
-    width: 2px;
+    width: 5px;
     background-color: #6C7080;
   }
   ::-webkit-scrollbar-thumb {
@@ -120,17 +117,11 @@ const StyledListbox = styled("ul")(
     background-color: #6C7080;
   }
   box-shadow:none;
-  // position:relative;
   `
 );
 
 const StyledOption = styled(OptionUnstyled)(
   ({ theme }) => `
-// font-family: 'Manrope';
-// font-weight: 600;
-// font-size: 16px;
-// line-height: 24px;
-
   list-style: none;
   padding: 12px;
   height: 48px;
@@ -145,13 +136,13 @@ const StyledOption = styled(OptionUnstyled)(
     background-color:#2F313B; // x4
   }
   &.${optionUnstyledClasses.highlighted} {
-    background:#292A33;//x3
+    background:#292A33; //x3
   }
   &.${optionUnstyledClasses.highlighted}.${optionUnstyledClasses.selected} {
     background-color:#2F313B; // x4
   }
   &:hover {
-    background:#292A33;//x3
+    background:#292A33; // x3
   }
   margin:0;
   `
@@ -159,25 +150,13 @@ const StyledOption = styled(OptionUnstyled)(
 
 const StyledPopper = styled(PopperUnstyled)`
   z-index: 1;
-  // position: relative;
   background: #3b3e4a; // x5
-  // background: slateblue; // x5
   padding: 8px 8px 8px 0;
   box-sizing: border-box;
   width: 100%;
   border-radius: 12px;
   overflow-x: hidden;
-  // &::after {
-  //   content: "";
-  //   position: absolute;
-  //   left: 300px;
-  //   right: 0;
-  //   top: 0;
-  //   bottom: 0;
-  //   z-index: 999;
-  //   background: pink;
-  //   pointer-events: none;
-  // }
+  position: relative;
 `;
 
 const CustomSelect = React.forwardRef(function CustomSelect(props, ref) {
@@ -187,24 +166,20 @@ const CustomSelect = React.forwardRef(function CustomSelect(props, ref) {
     popper: StyledPopper,
     ...props.slots,
   };
+
   return <SelectUnstyled {...props} ref={ref} slots={slots} />;
 });
 
 export default function UnstyledSelectIntroduction({
-  // opened,
   setFieldTouched,
   ...props
 }) {
-  console.log("error", props.error);
-  // const [opened, setOpened] = React.useState(false);
-
-  const { onBlur, onFocus, onChange, ...restProps } = props;
+  const { onBlur, onFocus } = props;
   const onListboxOpenChange = (open) => {
-    // setFieldTouched("select", false);
-    // setOpened(open);
     if (open) {
       onFocus();
     } else {
+      // setTomeout is necessary for validation to work correctly
       setTimeout(() => {
         onBlur();
       }, 0);
@@ -213,13 +188,12 @@ export default function UnstyledSelectIntroduction({
   return (
     <SelectContainer>
       <CustomSelect
-        onChange={onChange}
+        onChange={props.onChange}
         value={props.value}
-        onBlur={onBlur}
-        onFocus={onFocus}
-        {...restProps}
-        // open={props.open}
         onListboxOpenChange={onListboxOpenChange}
+        error={props.error}
+        placeholder={props.placeholder}
+        selectType={props.selectType}
       >
         {props.options.map((option, idx) => (
           <StyledOption key={idx} value={option.value}>
@@ -229,15 +203,5 @@ export default function UnstyledSelectIntroduction({
       </CustomSelect>
       {props.error && <div>{props.error}</div>}
     </SelectContainer>
-    // <>
-    //   <select onChange={props.onChange} value={props.value} {...props}>
-    //     {props.options.map((option) => (
-    //       <option value={option.value} key={option.value}>
-    //         {option.label}
-    //       </option>
-    //     ))}
-    //   </select>
-    //   {props.error && <p>{props.error}</p>}
-    // </>
   );
 }

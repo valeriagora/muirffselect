@@ -13,36 +13,22 @@ const SelectInput = ({
   selectType,
   ...props
 }) => {
+  console.log("input ptops", props);
   const onChange = (e, value) => {
     input.onChange(value);
   };
-  console.log("touched", meta.touched);
-  console.log("error", meta.error);
-  // console.log("meta", meta);
 
-  const onFocus = (e) => {
-    console.log("focus");
-    // typeof setFieldTouched === "function" && setFieldTouched("select", false);
-
-    input.onFocus(e);
-  };
-  const onBlur = (e) => {
-    console.log("blur");
-    // typeof setFieldTouched === "function" && setFieldTouched("select", false);
-
-    input.onBlur(e);
-  };
   return (
     <Select
       id={id}
-      type={selectType}
+      selectType={selectType}
       options={options}
       value={input.value}
       onChange={onChange}
-      onBlur={onBlur}
-      onFocus={onFocus}
+      onBlur={input.onBlur}
+      onFocus={input.onFocus}
       placeholder={placeholder}
-      setFieldTouched={setFieldTouched}
+      // setFieldTouched={setFieldTouched}
       name={input.name}
       error={meta.touched && meta.error ? meta.error : undefined}
       {...props}
@@ -86,8 +72,6 @@ export default function App() {
     console.log("v", v);
   };
 
-  const onListboxOpenChange = (open) => {};
-
   return (
     <Form onSubmit={handleSubmit} mutators={{ setFieldTouched }}>
       {({ handleSubmit, form }) => (
@@ -104,9 +88,8 @@ export default function App() {
             options={options}
             validate={required}
             setFieldTouched={form.mutators.setFieldTouched}
-            selectType={types.secondary}
-            // onListboxOpenChange={onListboxOpenChange}
-          ></Field>
+            selectType={types.primary}
+          />
           <br />
           <button>Submit</button>
         </form>
