@@ -16,11 +16,11 @@ const SelectInput = ({
   const onChange = (e, value) => {
     input.onChange(value);
   };
-  console.log("touched", meta.touched);
-  console.log("error", meta.error);
-
+  console.log(!meta.validating && meta.touched && meta.error);
+  console.log(meta.validating);
   const onFocus = (e) => {
     console.log("focus");
+    
     // typeof setFieldTouched === "function" && setFieldTouched("select", false);
 
     input.onFocus(e);
@@ -43,7 +43,7 @@ const SelectInput = ({
       placeholder={placeholder}
       setFieldTouched={setFieldTouched}
       name={input.name}
-      error={!meta.pristine && meta.error ? meta.error : undefined}
+      error={meta.touched && meta.error ? meta.error : undefined}
       {...props}
       // label={label}
       // helperText={helperText}

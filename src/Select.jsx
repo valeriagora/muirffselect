@@ -177,11 +177,21 @@ const CustomSelect = React.forwardRef(function CustomSelect(props, ref) {
 export default function UnstyledSelectIntroduction({
   // opened,
   setFieldTouched,
+  onBlur,
+  onFocus,
   ...props
 }) {
   const [opened, setOpened] = React.useState(false);
   const onListboxOpenChange = (open) => {
     // setFieldTouched("select", false);
+    console.log("open", open)
+    if (open) {
+      onFocus()
+    } else {
+      setTimeout(() => {
+        onBlur()
+      }, 50);
+    }
     setOpened(open);
   };
   return (
@@ -191,7 +201,7 @@ export default function UnstyledSelectIntroduction({
         value={props.value}
         // open={props.open}
         onListboxOpenChange={onListboxOpenChange}
-        {...props}
+        error={props.error}
       >
         {props.options.map((option, idx) => (
           <StyledOption key={idx} value={option.value}>
