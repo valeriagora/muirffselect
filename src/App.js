@@ -14,13 +14,13 @@ const SelectInput = ({
   ...props
 }) => {
   const onChange = (e, value) => {
-     input.onChange(value);
+    input.onChange(value);
   };
-  console.log("touched", meta.touched);
-  console.log("error", meta.error);
-
+  console.log(!meta.validating && meta.touched && meta.error);
+  console.log(meta.validating);
   const onFocus = (e) => {
     console.log("focus");
+    
     // typeof setFieldTouched === "function" && setFieldTouched("select", false);
 
     input.onFocus(e);
