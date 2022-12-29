@@ -19,7 +19,7 @@ const isPrimary = (type) => type === types.primary;
 
 const Button = React.forwardRef(function Button(props, ref) {
   const { ownerState, ...other } = props;
-  console.log("buttonprops", props);
+  // console.log("buttonprops", props);
   return (
     <button type="button" {...other} ref={ref}>
       {other.children}
@@ -120,8 +120,7 @@ const StyledListbox = styled("ul")(
     background-color: #6C7080;
   }
   box-shadow:none;
-  // position:relative; 
- 
+  // position:relative;
   `
 );
 
@@ -196,19 +195,29 @@ export default function UnstyledSelectIntroduction({
   setFieldTouched,
   ...props
 }) {
-  const [opened, setOpened] = React.useState(false);
+  console.log("error", props.error);
+  // const [opened, setOpened] = React.useState(false);
+
+  const { onBlur, onFocus, onChange, ...restProps } = props;
   const onListboxOpenChange = (open) => {
     // setFieldTouched("select", false);
-    setOpened(open);
+    // setOpened(open);
+    if (open) {
+      onFocus();
+    } else {
+      setTimeout(() => {
+        onBlur();
+      }, 0);
+    }
   };
-  const { onBlur, onFocus, onChange, ...restProps } = props;
   return (
     <SelectContainer>
       <CustomSelect
         onChange={onChange}
         value={props.value}
-        onBlur={props.onBlur}
-        onFocus={props.onFocus}
+        onBlur={onBlur}
+        onFocus={onFocus}
+        {...restProps}
         // open={props.open}
         onListboxOpenChange={onListboxOpenChange}
       >
